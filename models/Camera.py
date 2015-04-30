@@ -8,20 +8,20 @@ class Camera(object):
     def __init__(self, position, up_direction, focus_position, field_of_view, image_width, image_height):
         super(Camera, self).__init__()
 
-        self.e = position # Point of Camera Postition
-        self.up = up_direction # Vector indicating Cameras up Direction
-        self.c = focus_position # Point of Camera Focus
-        self.field_of_view = float(field_of_view) # Camera Aperture
+        self.e = position  # Point of Camera Postition
+        self.up = up_direction  # Vector indicating Cameras up Direction
+        self.c = focus_position  # Point of Camera Focus
+        self.field_of_view = float(field_of_view)  # Camera Aperture
         self.image_pixel_width = image_width
         self.image_pixel_height = image_height
         self.aspect_ratio = float(self.image_pixel_width) / float(self.image_pixel_height)
 
         # calculate extrinsic camera parameters
         # this calculates the right-handed coordinate system from our camera
-        self.f = (self.c - self.e) / ((self.c - self.e).length()) # Vector from Camera Position towards Camera Focus
-        self.s = (self.f.cross(self.up)) / (self.f.cross(self.up)).length() # Right Facing Vector of the Coordinate System
+        self.f = (self.c - self.e) / ((self.c - self.e).length())  # Vector from Camera Position towards Camera Focus
+        self.s = (self.f.cross(self.up)) / (self.f.cross(self.up)).length()  # Right Facing Vector of the Coordinate System
         # TODO: propably facing wrong direction?
-        self.u = self.s.cross(self.f) # Up Facing Vector of the coordinate system
+        self.u = self.s.cross(self.f)  # Up Facing Vector of the coordinate system
 
         # calculate intrinsic camera parameters
         # defines the 2d mapping range (Sensor)

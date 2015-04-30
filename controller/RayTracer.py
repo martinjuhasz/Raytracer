@@ -44,7 +44,7 @@ class RayTracer(object):
                 for single_object in self.objects:
                     hitdist = single_object.intersection_parameter(ray)
                     if hitdist:
-                        if hitdist < maxdist:
+                        if 0 < hitdist < maxdist:
                             maxdist = hitdist
                             color = single_object.color_at(ray)
                 self.image.putpixel((x, y), color)
