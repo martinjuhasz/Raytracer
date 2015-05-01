@@ -1,6 +1,8 @@
+from models.EnvironmentObject import EnvironmentObject
+
 __author__ = 'martinjuhasz'
 
-class Plane(object):
+class Plane(EnvironmentObject):
     def __init__(self, center, normal):
         super(Plane, self).__init__()
 
@@ -23,5 +25,9 @@ class Plane(object):
         else:
             return None
 
-    def color_at(self, ray):
-        return (68, 179, 90)
+    def color_at(self, ray, is_shadowed=False):
+        color = (68, 179, 90)
+
+        if is_shadowed:
+            return self.add_shadow(color)
+        return color

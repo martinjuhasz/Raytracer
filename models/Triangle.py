@@ -1,7 +1,9 @@
+from models.EnvironmentObject import EnvironmentObject
+
 __author__ = 'martinjuhasz'
 
 
-class Triangle(object):
+class Triangle(EnvironmentObject):
 
     def __init__(self, a, b, c):
         super(Triangle, self).__init__()
@@ -36,5 +38,9 @@ class Triangle(object):
         else:
             return None
 
-    def color_at(self, ray):
-        return (115, 141, 201)
+    def color_at(self, ray, is_shadowed=False):
+        color = (115, 141, 201)
+
+        if is_shadowed:
+            return self.add_shadow(color)
+        return color

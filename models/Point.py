@@ -25,7 +25,7 @@ class Point(object):
         x = vector[0] + self.position[0]
         y = vector[1] + self.position[1]
         z = vector[2] + self.position[2]
-        return Point(x, y, z)
+        return Point([x, y, z])
 
     def __sub__(self, other):
         """

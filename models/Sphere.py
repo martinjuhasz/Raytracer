@@ -1,9 +1,10 @@
 import math
+from models.EnvironmentObject import EnvironmentObject
 
 __author__ = 'martinjuhasz'
 
 
-class Sphere(object):
+class Sphere(EnvironmentObject):
 
     def __init__(self, center, radius):
         super(Sphere, self).__init__()
@@ -29,6 +30,9 @@ class Sphere(object):
         else:
             return v - math.sqrt(discriminant)
 
+    def color_at(self, ray, is_shadowed=False):
+        color = (255, 0, 0)
 
-    def color_at(self, ray):
-        return (255, 0, 0)
+        if is_shadowed:
+            return self.add_shadow(color)
+        return color
