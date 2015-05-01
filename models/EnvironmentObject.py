@@ -2,16 +2,16 @@ __author__ = 'martinjuhasz'
 
 
 class EnvironmentObject(object):
-    SHADOW_STRENGTH = 0.7
+
+    def __init__(self, material):
+        super(EnvironmentObject, self).__init__()
+        self.material = material
 
     def intersection_parameter(self, ray):
-        return None
+        raise NotImplementedError
 
-    @staticmethod
-    def add_shadow(color):
-        return int(round(color[0] * EnvironmentObject.SHADOW_STRENGTH)), int(
-            round(color[1] * EnvironmentObject.SHADOW_STRENGTH)), int(
-            round(color[2] * EnvironmentObject.SHADOW_STRENGTH))
+    def color_at(self, ray, light, hit_point, ambient_color, is_shadowed=False):
+        return self.material.get_color(ray, light, self.normal_at(hit_point), hit_point, ambient_color, is_shadowed)
 
-    def color_at(self, ray, is_shadowed=False):
-        return 0, 0, 0
+    def normal_at(self, point):
+        raise NotImplementedError

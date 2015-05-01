@@ -6,8 +6,8 @@ __author__ = 'martinjuhasz'
 
 class Sphere(EnvironmentObject):
 
-    def __init__(self, center, radius):
-        super(Sphere, self).__init__()
+    def __init__(self, material, radius, center):
+        super(Sphere, self).__init__(material)
 
         self.center = center
         self.radius = radius
@@ -30,9 +30,5 @@ class Sphere(EnvironmentObject):
         else:
             return v - math.sqrt(discriminant)
 
-    def color_at(self, ray, is_shadowed=False):
-        color = (255, 0, 0)
-
-        if is_shadowed:
-            return self.add_shadow(color)
-        return color
+    def normal_at(self, point):
+        return (point - self.center).normalized()

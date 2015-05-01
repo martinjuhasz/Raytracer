@@ -27,6 +27,17 @@ class Vector(object):
         z = self.direction[2] + other[2]
         return Vector([x, y, z])
 
+    def __sub__(self, other):
+        """
+        Subtracts two Vectors
+        :param other: the second Vector for calculation
+        :return: new, resulting Vector
+        """
+        x = self.direction[0] - other[0]
+        y = self.direction[1] - other[1]
+        z = self.direction[2] - other[2]
+        return Vector([x, y, z])
+
     def __div__(self, other):
         """
         Divides the Vector with a scalar

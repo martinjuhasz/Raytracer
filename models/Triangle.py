@@ -5,8 +5,8 @@ __author__ = 'martinjuhasz'
 
 class Triangle(EnvironmentObject):
 
-    def __init__(self, a, b, c):
-        super(Triangle, self).__init__()
+    def __init__(self, material, b, c, a):
+        super(Triangle, self).__init__(material)
 
         self.a = a
         self.b = b
@@ -38,9 +38,5 @@ class Triangle(EnvironmentObject):
         else:
             return None
 
-    def color_at(self, ray, is_shadowed=False):
-        color = (115, 141, 201)
-
-        if is_shadowed:
-            return self.add_shadow(color)
-        return color
+    def normal_at(self, point):
+        return self.u.cross(self.v).normalized()
