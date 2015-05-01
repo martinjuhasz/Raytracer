@@ -19,7 +19,8 @@ class Camera(object):
         # calculate extrinsic camera parameters
         # this calculates the right-handed coordinate system from our camera
         self.f = (self.c - self.e) / ((self.c - self.e).length())  # Vector from Camera Position towards Camera Focus
-        self.s = (self.f.cross(self.up)) / (self.f.cross(self.up)).length()  # Right Facing Vector of the Coordinate System
+        # Right Facing Vector of the Coordinate System
+        self.s = (self.f.cross(self.up)) / (self.f.cross(self.up)).length()
         # TODO: propably facing wrong direction?
         self.u = self.s.cross(self.f)  # Up Facing Vector of the coordinate system
 
