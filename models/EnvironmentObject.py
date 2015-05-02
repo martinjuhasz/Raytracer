@@ -10,8 +10,8 @@ class EnvironmentObject(object):
     def intersection_parameter(self, ray):
         raise NotImplementedError
 
-    def color_at(self, ray, light, hit_point, ambient_color, is_shadowed=False):
-        return self.material.get_color(ray, light, self.normal_at(hit_point), hit_point, ambient_color, is_shadowed)
+    def color_at(self, ray, lights, hit_point, ambient_color, shadows=0):
+        return self.material.get_color(ray, lights, self.normal_at(hit_point), hit_point, ambient_color, shadows)
 
     def normal_at(self, point):
         raise NotImplementedError

@@ -31,13 +31,16 @@ if __name__ == "__main__":
         Sphere(Material((0, 255, 0)), 1.2, Point([1.5, 2.5, -2])),
         Sphere(Material((0, 0, 255)), 1.2, Point([0, 5.5, -2])),
         Plane(ChessBoardMaterial((255, 255, 255), (50, 50, 50), reflection_strength=0), Vector([0, 1, 0]), Point([0, -1, 0])),
-        Triangle(Material((255, 0, 255), reflection_strength=0), Point([-1.5, 2.5, -2]), Point([1.5, 2.5, -2]), Point([0, 5.5, -2]))
+        Triangle(Material((255, 0, 255), reflection_strength=0), Point([-1.5, 2.5, -4]), Point([1.5, 2.5, -4]), Point([0, 5.5, -4]))
     ]
 
     # lights
-    light = LightSource([30, 30, 10], (255, 255, 255))
+    lights = [
+        LightSource([30, 30, 10], (255, 255, 255)),
+        LightSource([-10, 100, 30], (255, 255, 255))
+    ]
 
     # render image
-    raytracer = RayTracer(camera, objects, light)
+    raytracer = RayTracer(camera, objects, lights)
     image = raytracer.render()
     image.show()

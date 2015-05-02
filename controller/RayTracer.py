@@ -13,8 +13,8 @@ class RayTracer(object):
     RayTracer transforms a given global lightning system into an 2D Image.
     """
 
-    def __init__(self, camera, objects, light, background_color=Color(0, 0, 0), ambient_color=Color(255, 255, 255),
-                 recursion_level=4):
+    def __init__(self, camera, objects, lights, background_color=Color(0, 0, 0), ambient_color=Color(255, 255, 255),
+                 recursion_level=2, antialiasing=1):
         """
         Default initializer
         :param camera:  The Camera Object from where the system should be rendered
@@ -26,10 +26,11 @@ class RayTracer(object):
 
         self.camera = camera
         self.objects = objects
-        self.light = light
+        self.lights = lights
         self.background_color = background_color
         self.ambient_color = ambient_color
         self.recursion_level = recursion_level
+        self.antialiasing = antialiasing
         self.image = PIL.Image.new(
             'RGB',
             (self.camera.image_pixel_width, self.camera.image_pixel_height),
@@ -44,10 +45,17 @@ class RayTracer(object):
         for x in range(self.camera.image_pixel_width):
             for y in range(self.camera.image_pixel_height):
 
-                # get a ray for each pixel
-                ray = self.camera.ray_for_pixel(x, y)
-                color = self.trace_ray(0, ray)
-                self.image.putpixel((x, y), (color.r, color.g, color.b))
+                # get a ray for each part of the pixel
+                raypoints_to_check = [(x + (pixel_part * (1.0/self.antialiasing)), y + (pixel_part * (1.0/self.antialiasing))) for pixel_part in range(0, self.antialiasing)]
+
+                pixel_color = Color(0, 0, 0)
+                color_weight = 1.0 / self.antialiasing
+
+                for point in raypoints_to_check:
+                    ray = self.camera.ray_for_pixel(point[0], point[1])
+                    pixel_color += self.trace_ray(0, ray) * color_weight
+
+                self.image.putpixel((x, y), (pixel_color.r, pixel_color.g, pixel_color.b))
 
         return self.image
 
@@ -58,7 +66,7 @@ class RayTracer(object):
         return self.background_color
 
     def shade(self, level, hit_point):
-        direct_color = hit_point.item.color_at(hit_point.ray, self.light, hit_point.point, self.ambient_color, hit_point.shadowed)
+        direct_color = hit_point.item.color_at(hit_point.ray, self.lights, hit_point.point, self.ambient_color, hit_point.shadows)
 
         reflected_ray_vector = hit_point.ray.direction.mirrored_at(hit_point.item.normal_at(hit_point.point))
         reflected_ray = Ray(hit_point.point, reflected_ray_vector)
@@ -93,27 +101,29 @@ class RayTracer(object):
         if not hit_object:
             return None
 
-        is_shadowed = self.object_is_shadowed(ray, maxdist)
-        return HitPoint(ray, hit_object, hit_point, maxdist, is_shadowed)
+        shadows = self.shadows_at_point(ray, maxdist)
+        return HitPoint(ray, hit_object, hit_point, maxdist, shadows)
 
-    def object_is_shadowed(self, ray, distance):
+    def shadows_at_point(self, ray, distance):
         """
         Checks if a point (ray at distance) is shadowed by another object
         :param ray: the ray
         :param distance: the distance of the point
-        :return: True or False
+        :return: Number of Shadows overlapping
         """
         # Fixing shadow rounding errors
         # see S.14: http://www.cs.cornell.edu/courses/cs4620/2011fa/lectures/08raytracingWeb.pdf
         hit_point = ray.point_at_parameter(distance - 0.00000001)
-        light_vector = Point(self.light.origin) - hit_point
-        light_ray = Ray(hit_point, light_vector)
+        count = 0
+        for light in self.lights:
+            light_vector = Point(light.origin) - hit_point
+            light_ray = Ray(hit_point, light_vector)
 
-        for single_object in self.objects:
-            hitdist = single_object.intersection_parameter(light_ray)
-            if hitdist and 0 < hitdist:
-                    return True
+            for single_object in self.objects:
+                hitdist = single_object.intersection_parameter(light_ray)
+                if hitdist and 0 < hitdist:
+                        count += 1
 
-        return False
+        return count
 
 
