@@ -1,5 +1,5 @@
 from models.Color import Color
-from models.Material import Material
+from models.materials import Material
 from models.Vector import Vector
 
 __author__ = 'martinjuhasz'

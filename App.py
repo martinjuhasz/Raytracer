@@ -1,12 +1,11 @@
 from controller.RayTracer import RayTracer
 from models.Camera import Camera
-from models.ChessBoardMaterial import ChessBoardMaterial
 from models.LightSource import LightSource
-from models.Material import Material
-from models.Plane import Plane
+from models.materials import Material, ChessBoardMaterial
+from models.objects import Plane
 from models.Point import Point
-from models.Sphere import Sphere
-from models.Triangle import Triangle
+from models.objects.Sphere import Sphere
+from models.objects.Triangle import Triangle
 from models.Vector import Vector
 
 __author__ = 'martinjuhasz'

@@ -1,4 +1,4 @@
-from models.EnvironmentObject import EnvironmentObject
+from models.objects import EnvironmentObject
 
 __author__ = 'martinjuhasz'
 
