@@ -102,3 +102,11 @@ class Vector(object):
         y = self.direction[2] * vector[0] - self.direction[0] * vector[2]
         z = self.direction[0] * vector[1] - self.direction[1] * vector[0]
         return Vector([x, y, z])
+
+    def mirrored_at(self, vector):
+        """
+        Mirrors the Vector on the given one
+        :param vector: the vector where it should be mirrored
+        :return: new, resulting mirrored Vector
+        """
+        return self - vector.scale(2 * vector.dot(self))

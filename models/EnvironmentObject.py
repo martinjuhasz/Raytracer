@@ -15,3 +15,6 @@ class EnvironmentObject(object):
 
     def normal_at(self, point):
         raise NotImplementedError
+
+    def get_reflected_color(self, color):
+        return self.material.get_reflected_color(color)

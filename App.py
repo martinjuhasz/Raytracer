@@ -1,5 +1,6 @@
 from controller.RayTracer import RayTracer
 from models.Camera import Camera
+from models.ChessBoardMaterial import ChessBoardMaterial
 from models.LightSource import LightSource
 from models.Material import Material
 from models.Plane import Plane
@@ -14,27 +15,27 @@ __author__ = 'martinjuhasz'
 if __name__ == "__main__":
 
     # general parameters
-    image_width = 400
-    image_height = 400
+    image_width = 300
+    image_height = 300
     field_of_view = 45
 
     # camera setup
-    camera_postition = Point([0, 1.8, 2])
+    camera_postition = Point([0, 1.8, 10])
     camera_up_direction = Vector([0, 1, 0])
-    camera_focus = Point([0, 1, 8])
+    camera_focus = Point([0, 3, 0])
     camera = Camera(camera_postition, camera_up_direction, camera_focus, field_of_view, image_width, image_height)
 
     # setup objects
     objects = [
-        Sphere(Material((255, 0, 0)), 1.9, Point([-2.5, 1, 17])),
-        Sphere(Material((0, 255, 0)), 1.9, Point([2.5, 1, 17])),
-        Sphere(Material((0, 0, 255)), 1.9, Point([0, -3.0, 17])),
-        Plane(Material((200, 200, 200)), Vector([0, -1, 0]), Point([0, 3.5, 0])),
-        Triangle(Material((255, 0, 255)), Point([0, -3.0, 17]), Point([-2.5, 1, 17]), Point([2.5, 1, 17]))
+        Sphere(Material((255, 0, 0)), 1.2, Point([-1.5, 2.5, -2])),
+        Sphere(Material((0, 255, 0)), 1.2, Point([1.5, 2.5, -2])),
+        Sphere(Material((0, 0, 255)), 1.2, Point([0, 5.5, -2])),
+        Plane(ChessBoardMaterial((255, 255, 255), (50, 50, 50), reflection_strength=0), Vector([0, 1, 0]), Point([0, -1, 0])),
+        Triangle(Material((255, 0, 255), reflection_strength=0), Point([-1.5, 2.5, -2]), Point([1.5, 2.5, -2]), Point([0, 5.5, -2]))
     ]
 
     # lights
-    light = LightSource([-10, -12, 4], (255, 255, 255))
+    light = LightSource([30, 30, 10], (255, 255, 255))
 
     # render image
     raytracer = RayTracer(camera, objects, light)
