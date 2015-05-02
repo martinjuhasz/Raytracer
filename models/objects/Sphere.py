@@ -1,6 +1,6 @@
 import math
 
-from models.objects import EnvironmentObject
+from models.objects.EnvironmentObject import EnvironmentObject
 
 
 __author__ = 'martinjuhasz'

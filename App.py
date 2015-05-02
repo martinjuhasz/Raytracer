@@ -1,8 +1,9 @@
 from controller.RayTracer import RayTracer
 from models.Camera import Camera
 from models.LightSource import LightSource
-from models.materials import Material, ChessBoardMaterial
-from models.objects import Plane
+from models.materials.ChessBoardMaterial import ChessBoardMaterial
+from models.materials.Material import Material
+from models.objects.Plane import Plane
 from models.Point import Point
 from models.objects.Sphere import Sphere
 from models.objects.Triangle import Triangle
