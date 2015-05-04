@@ -19,6 +19,9 @@ if __name__ == "__main__":
     image_height = 300
     field_of_view = 45
 
+    reflection_recursion_level = 2
+    antialiasing = 1  # 1= off, 4, 8, 16
+
     # camera setup
     camera_postition = Point([0, 1.8, 10])
     camera_up_direction = Vector([0, 1, 0])
@@ -41,6 +44,7 @@ if __name__ == "__main__":
     ]
 
     # render image
-    raytracer = RayTracer(camera, objects, lights)
+    raytracer = RayTracer(camera, objects, lights, recursion_level=reflection_recursion_level, antialiasing=antialiasing)
     image = raytracer.render()
     image.show()
+    # image.save("output/export.png", "PNG")
