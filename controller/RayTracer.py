@@ -4,7 +4,7 @@ from models.Color import Color
 from models.HitPoint import HitPoint
 from models.Point import Point
 from models.Ray import Ray
-
+import math
 __author__ = 'martinjuhasz'
 
 
@@ -14,7 +14,7 @@ class RayTracer(object):
     """
 
     def __init__(self, camera, objects, lights, background_color=Color(0, 0, 0), ambient_color=Color(255, 255, 255),
-                 recursion_level=2, antialiasing=1):
+                 recursion_level=2, antialiasing=1, status_callback=None):
         """
         Default initializer
         :param camera:  The Camera Object from where the system should be rendered
@@ -30,12 +30,20 @@ class RayTracer(object):
         self.background_color = background_color
         self.ambient_color = ambient_color
         self.recursion_level = recursion_level
-        self.antialiasing = antialiasing
+
+        if antialiasing not in [1, 4, 16]:
+            raise NotImplementedError
+
+        self.antialiasing = antialiasing if antialiasing == 1 else int(math.sqrt(antialiasing))
+        self.status_callback = status_callback
+        self.current_status = -1
         self.image = PIL.Image.new(
             'RGB',
             (self.camera.image_pixel_width, self.camera.image_pixel_height),
             (self.background_color.r, self.background_color.g, self.background_color.b))
 
+    def __repr__(self):
+        return 'RayTracer(background_color=%s, ambient_color=%s, recursion_level=%s, antialiasing=%s)' % (self.background_color, self.ambient_color, self.recursion_level, self.antialiasing)
 
     def render(self):
         """
@@ -45,17 +53,30 @@ class RayTracer(object):
         for x in range(self.camera.image_pixel_width):
             for y in range(self.camera.image_pixel_height):
 
+                if self.status_callback:
+                    percentage = int((x * y) / float(self.camera.image_pixel_width * self.camera.image_pixel_height) * 100)
+                    if percentage > self.current_status:
+                        self.current_status = percentage
+                        self.status_callback(percentage)
+
                 # get a ray for each part of the pixel
-                raypoints_to_check = [(x + (pixel_part * (1.0/self.antialiasing)), y + (pixel_part * (1.0/self.antialiasing))) for pixel_part in range(0, self.antialiasing)]
+                #raypoints_to_check = [(x + (pixel_part * (1.0/self.antialiasing)), y + (pixel_part * (1.0/self.antialiasing))) for pixel_part in range(0, self.antialiasing)]
+
+                raypoints_to_check = []
+                raypoint_gap = 1.0/self.antialiasing
+                for pixel_part_x in range(0, self.antialiasing):
+                    for pixel_part_y in range(0, self.antialiasing):
+                        raypoints_to_check.append((x + (pixel_part_x * raypoint_gap), y + (pixel_part_y * raypoint_gap)))
 
                 pixel_color = Color(0, 0, 0)
-                color_weight = 1.0 / self.antialiasing
+                #color_weight = 1.0 / self.antialiasing
+                color_weight = 1.0 / (self.antialiasing ** 2)
 
                 for point in raypoints_to_check:
                     ray = self.camera.ray_for_pixel(point[0], point[1])
                     pixel_color += self.trace_ray(0, ray) * color_weight
 
-                self.image.putpixel((x, y), (pixel_color.r, pixel_color.g, pixel_color.b))
+                self.image.putpixel((x, y), pixel_color.get_rgb())
 
         return self.image
 

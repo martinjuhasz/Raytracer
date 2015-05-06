@@ -5,8 +5,13 @@ __author__ = 'martinjuhasz'
 
 
 class Material(object):
-    def __init__(self, color, reflection_strength=0.3, shadow_strength=0.3, ambient_constant=0.4, diffuse_constant=0.3,
-                 specular_constant=0.4, specular_scaling=20):
+    def __init__(self, color,
+                 reflection_strength=0.2,
+                 shadow_strength=0.2,
+                 ambient_constant=0.6,
+                 diffuse_constant=0.3,
+                 specular_constant=0.4,
+                 specular_scaling=20):
         super(Material, self).__init__()
 
         self.color = Color(color[0], color[1], color[2])
@@ -17,6 +22,9 @@ class Material(object):
         self.diffuse_constant = diffuse_constant
         self.specular_constant = specular_constant
         self.specular_scaling = specular_scaling
+
+    def __repr__(self):
+        return 'Material(color=%s)' % (self.color,)
 
     def base_color_at(self, point):
         return self.color
@@ -47,14 +55,17 @@ class Material(object):
 
         for light in lights:
             light_vector = (Point(light.origin) - hit_point).normalized()
-            diffuse_part += self.calculate_diffuse(color, normal, light, hit_point, light_vector)
+            diffuse_part += self.calculate_diffuse(light.color, normal, light, hit_point, light_vector)
 
             # angle between light and normal > 90 deg => not facing in same direction => no reflection
             if normal.dot(light_vector) > 0:
-                specular_part += self.calculate_specular(color, ray, hit_point, light, normal, light_vector)
+                specular_part += self.calculate_specular(light.color, ray, hit_point, light, normal, light_vector)
 
-        color = ambient_part + diffuse_part + specular_part
-        color = self.add_shadow(color, shadows)
+        if shadows > 0:
+            color = ambient_part
+            color = self.add_shadow(color, shadows)
+        else:
+            color = ambient_part + diffuse_part + specular_part
 
         return color
 

@@ -22,7 +22,7 @@ class Camera(object):
         # Right Facing Vector of the Coordinate System
         self.s = (self.f.cross(self.up)) / (self.f.cross(self.up)).length()
         # TODO: propably facing wrong direction?
-        self.u = self.s.cross(self.f)  # Up Facing Vector of the coordinate system
+        self.u = self.s.cross(self.f).scale(-1)  # Up Facing Vector of the coordinate system
 
         # calculate intrinsic camera parameters
         # defines the 2d mapping range (Sensor)

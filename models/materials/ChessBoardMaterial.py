@@ -6,14 +6,17 @@ __author__ = 'martinjuhasz'
 
 
 class ChessBoardMaterial(Material):
-    def __init__(self, color, second_color, reflection_strength=0.3, shadow_strength=0.7,
-                 ambient_constant=0.5, diffuse_constant=0.3, specular_constant=0.4, specular_scaling=20):
+    def __init__(self, color, second_color, reflection_strength=0.2, shadow_strength=0.4,
+                 ambient_constant=0.85, diffuse_constant=0.3, specular_constant=0.4, specular_scaling=20):
 
         super(ChessBoardMaterial, self).__init__(color, reflection_strength, shadow_strength, ambient_constant,
                                                  diffuse_constant, specular_constant, specular_scaling)
 
         self.second_color = Color(second_color[0], second_color[1], second_color[2])
         self.check_size = 1
+
+    def __repr__(self):
+        return 'ChessBoardMaterial(color=%s, second_color=%s)' % (self.color, self.second_color)
 
     def base_color_at(self, point):
         v = Vector([point[0], point[1], point[2]])

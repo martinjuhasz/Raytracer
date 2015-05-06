@@ -15,6 +15,10 @@ class Triangle(EnvironmentObject):
         self.u = self.b - self.a
         self.v = self.c - self.a
 
+    def __repr__(self):
+        return 'Triangle(material=%s, a=%s, b=%s, c=%s, u=%s, v=%s)' \
+               % (self.material, self.a, self.b, self.c, self.u, self.v)
+
     def intersection_parameter(self, ray):
         """
         Tests the current object if it intersects with the given ray

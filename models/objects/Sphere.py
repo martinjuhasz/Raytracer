@@ -14,6 +14,10 @@ class Sphere(EnvironmentObject):
         self.center = center
         self.radius = radius
 
+    def __repr__(self):
+        return 'Sphere(material=%s, center=%s, radius=%s)' \
+               % (self.material, self.center, self.radius)
+
     def intersection_parameter(self, ray):
         """
         Tests the current object if it intersects with the given ray

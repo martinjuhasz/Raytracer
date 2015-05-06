@@ -39,6 +39,9 @@ class Color(object):
         else:
             raise NotImplementedError
 
+    def get_rgb(self):
+        return int(round(self.r)), int(round(self.g)), int(round(self.b))
+
     @staticmethod
     def rgb_value(value):
         if value >= 255:
@@ -46,6 +49,7 @@ class Color(object):
         elif value <= 0:
             return 0
         else:
-            return int(round(value))
+            #return int(round(value))
+            return value
 
 

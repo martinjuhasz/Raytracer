@@ -9,6 +9,10 @@ class Plane(EnvironmentObject):
         self.center = center
         self.normal = normal
 
+    def __repr__(self):
+        return 'Plane(material=%s, center=%s, normal=%s)' \
+               % (self.material, self.center, self.normal)
+
     def intersection_parameter(self, ray):
         """
         Tests the current object if it intersects with the given ray
