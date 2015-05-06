@@ -6,6 +6,9 @@ __author__ = 'martinjuhasz'
 
 
 class ChessBoardMaterial(Material):
+    """
+    Custom Material with a colored grid pattern
+    """
     def __init__(self, color, second_color, reflection_strength=0.2, shadow_strength=0.4,
                  ambient_constant=0.85, diffuse_constant=0.3, specular_constant=0.4, specular_scaling=20):
 

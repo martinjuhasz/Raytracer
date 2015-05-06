@@ -21,7 +21,6 @@ class Camera(object):
         self.f = (self.c - self.e) / ((self.c - self.e).length())  # Vector from Camera Position towards Camera Focus
         # Right Facing Vector of the Coordinate System
         self.s = (self.f.cross(self.up)) / (self.f.cross(self.up)).length()
-        # TODO: propably facing wrong direction?
         self.u = self.s.cross(self.f).scale(-1)  # Up Facing Vector of the coordinate system
 
         # calculate intrinsic camera parameters
@@ -40,7 +39,12 @@ class Camera(object):
                   self.height, self.width, self.pixel_width, self.pixel_height)
 
     def ray_for_pixel(self, x, y):
-        # TODO: implement multiple pixels
+        """
+        Calculates a Ray for the given pixels of the camera sensor
+        :param x: x pixel
+        :param y: y pixel
+        :return: Ray going through the pixel
+        """
         xcomp = self.s.scale(x * self.pixel_width - self.width / 2)
         ycomp = self.u.scale(y * self.pixel_height - self.height / 2)
         return Ray(self.e, self.f + xcomp + ycomp)

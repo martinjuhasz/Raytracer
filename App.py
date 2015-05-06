@@ -48,7 +48,7 @@ if __name__ == "__main__":
     # lights
     lights = [
         LightSource([30, 30, 10], Color(255, 255, 255)),
-        # LightSource([-10, 100, 30], Color(255, 255, 255))
+        LightSource([-10, 100, 30], Color(255, 255, 255))
     ]
 
     # render image

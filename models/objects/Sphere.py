@@ -37,4 +37,9 @@ class Sphere(EnvironmentObject):
             return v - math.sqrt(discriminant)
 
     def normal_at(self, point):
+        """
+        Returns the normal of the object an the given point
+        :param point: Point of the normal starting at
+        :return: normal Vector
+        """
         return (point - self.center).normalized()

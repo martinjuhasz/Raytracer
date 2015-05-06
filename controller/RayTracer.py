@@ -34,7 +34,7 @@ class RayTracer(object):
         if antialiasing not in [1, 4, 16]:
             raise NotImplementedError
 
-        self.antialiasing = antialiasing if antialiasing == 1 else int(math.sqrt(antialiasing))
+        self.antialiasing = int(math.sqrt(antialiasing))
         self.status_callback = status_callback
         self.current_status = -1
         self.image = PIL.Image.new(
@@ -60,16 +60,10 @@ class RayTracer(object):
                         self.status_callback(percentage)
 
                 # get a ray for each part of the pixel
-                #raypoints_to_check = [(x + (pixel_part * (1.0/self.antialiasing)), y + (pixel_part * (1.0/self.antialiasing))) for pixel_part in range(0, self.antialiasing)]
-
-                raypoints_to_check = []
                 raypoint_gap = 1.0/self.antialiasing
-                for pixel_part_x in range(0, self.antialiasing):
-                    for pixel_part_y in range(0, self.antialiasing):
-                        raypoints_to_check.append((x + (pixel_part_x * raypoint_gap), y + (pixel_part_y * raypoint_gap)))
+                raypoints_to_check = [(x + (pixel_part_x * raypoint_gap), y + (pixel_part_y * raypoint_gap)) for pixel_part_y in range(0, self.antialiasing) for pixel_part_x in range(0, self.antialiasing)]
 
                 pixel_color = Color(0, 0, 0)
-                #color_weight = 1.0 / self.antialiasing
                 color_weight = 1.0 / (self.antialiasing ** 2)
 
                 for point in raypoints_to_check:
@@ -81,12 +75,24 @@ class RayTracer(object):
         return self.image
 
     def trace_ray(self, level, ray):
+        """
+        Starts the (propbably recursive) tracing of the given ray to get its final color
+        :param level: current recursion level depth (number of reflections to follow)
+        :param ray: the ray that should be followed
+        :return: final Color
+        """
         hit_point = self.intersect(level, ray)
         if hit_point:
             return self.shade(level, hit_point)
         return self.background_color
 
     def shade(self, level, hit_point):
+        """
+        Calculates the color at hit_point including the reflected part
+        :param level: current recursion level depth (number of reflections to follow)
+        :param hit_point: HitPoint object of ray collision
+        :return: shaded Color
+        """
         direct_color = hit_point.item.color_at(hit_point.ray, self.lights, hit_point.point, self.ambient_color, hit_point.shadows)
 
         reflected_ray_vector = hit_point.ray.direction.mirrored_at(hit_point.item.normal_at(hit_point.point))
@@ -106,7 +112,6 @@ class RayTracer(object):
         if level >= self.recursion_level:
             return None
 
-        # if ray hits an object
         hit_point = None
         hit_object = None
         maxdist = float('inf')
@@ -144,6 +149,7 @@ class RayTracer(object):
                 hitdist = single_object.intersection_parameter(light_ray)
                 if hitdist and 0 < hitdist:
                         count += 1
+                        break
 
         return count
 

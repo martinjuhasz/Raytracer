@@ -40,6 +40,10 @@ class Color(object):
             raise NotImplementedError
 
     def get_rgb(self):
+        """
+        gets the color as rounded integer values
+        :return: a tuple including r,g,b colors
+        """
         return int(round(self.r)), int(round(self.g)), int(round(self.b))
 
     @staticmethod
@@ -49,7 +53,6 @@ class Color(object):
         elif value <= 0:
             return 0
         else:
-            #return int(round(value))
             return value
 
 
