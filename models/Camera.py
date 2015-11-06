@@ -25,7 +25,7 @@ class Camera(object):
 
         # calculate intrinsic camera parameters
         # defines the 2d mapping range (Sensor)
-        alpha = self.field_of_view / 2
+        alpha = (self.field_of_view / 2) * math.pi / 180
         self.height = 2 * math.tan(alpha)
         self.width = self.aspect_ratio * self.height
         self.pixel_width = self.width / (image_width - 1)
